@@ -10,15 +10,15 @@ import Foundation
 
 class RemoteSearchProvider: AnimeSearchProvider {
 	/// The remote API host
-	var host: String = "https://anime.rileyw.dev"
+	//var host: String = "https://anime.rileyw.dev"
 	// NOTE: The above URL points to my personal server
-	// While working on this, I was never able to reach the provided API (no response / timeout)
-	//   so I used Docker to self-host a copy of the API on my personal home server
-	// Reading through the documentation of the official API, I noticed mentions of rate-limits
-	//   which my self-hosted copy does not have. Hopefully this won't matter.
-	// If the original API comes back up and/or for some reason my server is down, the below line
-	//   of code *should* switch it to the official API.
-	// var host: String = "https://api.jikan.moe"
+	// While working on this, I was sometimes unable to reach the provided API (no response / timeout)
+	//   so I used Docker to self-host a copy of the API on my personal home server. It should
+	//   behave identically to the official API.
+	// If the official API is working and/or for some reason my server is down, the below line
+	//   of code uses the official API.
+	/// The remote API host
+	 var host: String = "https://api.jikan.moe"
 	
 	/// Obtains a list of animes
 	/// - Parameter keyword: keyword to search for
