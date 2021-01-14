@@ -11,7 +11,9 @@ import SwiftUI
 struct AnimeApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+			NavigationView {
+				SearchView()
+			}.navigationViewStyle(StackNavigationViewStyle())
         }
     }
 }
