@@ -36,6 +36,8 @@ class DecodingTests: XCTestCase {
 						XCTFail("Failed to decode response")
 					case .Unresponsive:
 						XCTFail("Failed to reach the target server")
+					case .Other(_):
+						XCTFail("Failed due to unspecified network error")
 					}
 				case .finished:
 					break

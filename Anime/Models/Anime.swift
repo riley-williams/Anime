@@ -19,17 +19,19 @@ struct Anime: Codable {
 	var title: String
 	/// Bool indicating whether this show is still airing
 	var isAiring: Bool?
+	/// Short truncated description
+	var synopsis: String?
 	/// Anime type. e.g. TV, Special, etc.
 	var type: String
 	/// Number of episodes
 	var episodeCount: Int?
-	/// Reviewer score
+	/// Reviewer score 0.0 - 10.0
 	var score: Float?
 	/// Initial air date
 	var airDate: String?
 	/// Date of last episode
 	var endDate: String?
-	/// ???
+	/// Number of reviewers?
 	var members: Int
 	/// MPAA film rating
 	var rating: String?
@@ -40,6 +42,7 @@ struct Anime: Codable {
 		case imageURL = "image_url"
 		case title
 		case isAiring = "airing"
+		case synopsis
 		case type
 		case episodeCount = "episodes"
 		case score

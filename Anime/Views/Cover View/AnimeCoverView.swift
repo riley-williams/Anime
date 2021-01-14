@@ -34,8 +34,14 @@ struct AnimeCoverView: View {
 		}.clipShape(RoundedRectangle(cornerRadius: 10))
     }
 	
-	init(anime: Anime) {
+	/// - Parameters:
+	///   - anime: Anime model object
+	///   - preloadImage: Set to true if the image should be downloaded before the view appears
+	init(anime: Anime, preloadImage: Bool = false) {
 		self.viewModel = AnimeCoverViewModel(anime)
+		if preloadImage {
+			viewModel.retrieveImage()
+		}
 	}
 
 }

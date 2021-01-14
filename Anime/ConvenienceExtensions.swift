@@ -14,3 +14,18 @@ extension Collection where Element: Cancellable {
 		forEach { $0.cancel() }
 	}
 }
+
+extension String {
+	func toDateISO() -> Date? {
+		let dateFormatter = ISO8601DateFormatter()
+		return dateFormatter.date(from:self)
+	}
+}
+
+extension Date {
+	var year: String {
+		let dateFormatter = DateFormatter()
+		dateFormatter.dateFormat = "yyyy"
+		return dateFormatter.string(from: self)
+	}
+}

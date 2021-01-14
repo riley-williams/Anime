@@ -18,16 +18,17 @@ class AnimeTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+    func testISOStringToDateExtension() throws {
+        let string = "2013-04-07T00:00:00+00:00"
+		
+		if let date = string.toDateISO() {
+			XCTAssertEqual("2013", date.year)
+		} else {
+			XCTFail("Failed to decode date")
+		}
+	
+		
     }
 
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
-    }
 
 }

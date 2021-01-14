@@ -10,8 +10,15 @@ import Foundation
 
 class RemoteSearchProvider: AnimeSearchProvider {
 	/// The remote API host
-	var host: String = "http://192.168.1.5:59001"
-	
+	var host: String = "https://anime.rileyw.dev"
+	// NOTE: The above URL points to my personal server
+	// While working on this, I was never able to reach the provided API (no response / timeout)
+	//   so I used Docker to self-host a copy of the API on my personal home server
+	// Reading through the documentation of the official API, I noticed mentions of rate-limits
+	//   which my self-hosted copy does not have. Hopefully this won't matter.
+	// If the original API comes back up and/or for some reason my server is down, the below line
+	//   of code *should* switch it to the official API.
+	// var host: String = "https://api.jikan.moe"
 	
 	/// Obtains a list of animes
 	/// - Parameter keyword: keyword to search for
@@ -28,7 +35,8 @@ class RemoteSearchProvider: AnimeSearchProvider {
 		}
 		
 		return URLSession.shared.dataTaskPublisher(for: url)
-			.timeout(.seconds(1), scheduler: DispatchQueue.global())
+			// Apparently the official API only permits 1 request every 4s
+			//.throttle(for: .seconds(4.5), scheduler: RunLoop.current, latest: true)
 			.map(\.data)
 			.decode(type: SearchResponse.self, decoder: JSONDecoder())
 			.map(\.results)

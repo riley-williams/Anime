@@ -20,7 +20,7 @@ struct SearchView: View {
 		VStack {
 			TextField("Search", text: $viewModel.keyword)
 				.textFieldStyle(RoundedBorderTextFieldStyle())
-				.padding(.horizontal)
+				.padding([.top, .horizontal])
 
 			Picker("View mode", selection: $displayMode) {
 				Image(systemName: "rectangle.grid.3x2" + (displayMode == .Grid ? ".fill" : "") )
@@ -40,23 +40,24 @@ struct SearchView: View {
 					Text("Searching...")
 					Spacer()
 				} else {
-					ScrollView(showsIndicators: false) {
+					ScrollView(.vertical, showsIndicators: false) {
 						switch displayMode {
 						case .List:
 							LazyVStack { // List seems to not like matchedGeometryEffect when used here
 								ForEach(viewModel.results) { anime in
 									NavigationLink(destination: AnimeDetailsView(anime: anime)) {
 										HStack {
-											AnimeCoverView(anime: anime)
+											AnimeCoverView(anime: anime, preloadImage: true)
 												.matchedGeometryEffect(id: anime.id, in: searchViewNamespace, isSource: false)
 												
 											Text(anime.title)
 											Spacer()
-										}
+										}.padding(.horizontal)
 									}.buttonStyle(PlainButtonStyle())
 									.frame(idealHeight: 80)
 									
 									Divider()
+										.padding(.horizontal)
 								}
 							}
 						case .Grid:
@@ -64,7 +65,7 @@ struct SearchView: View {
 								ForEach(viewModel.results) { anime in
 									NavigationLink(destination: AnimeDetailsView(anime: anime)) {
 										VStack {
-											AnimeCoverView(anime: anime)
+											AnimeCoverView(anime: anime, preloadImage: true)
 												.matchedGeometryEffect(id: anime.id, in: searchViewNamespace)
 												.shadow(radius: 5)
 												
@@ -95,8 +96,6 @@ struct SearchView: View {
 
 struct SearchView_Previews: PreviewProvider {
 	static var previews: some View {
-		let view = SearchView()
-		view.viewModel.keyword = "Naruto"
-		return view
+		SearchView()
 	}
 }
