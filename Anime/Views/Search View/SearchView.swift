@@ -21,7 +21,7 @@ struct SearchView: View {
 			TextField("Search", text: $viewModel.keyword)
 				.textFieldStyle(RoundedBorderTextFieldStyle())
 				.padding([.top, .horizontal])
-
+			
 			Picker("View mode", selection: $displayMode) {
 				Image(systemName: "rectangle.grid.3x2" + (displayMode == .Grid ? ".fill" : "") )
 					.tag(DisplayMode.Grid)
@@ -49,10 +49,31 @@ struct SearchView: View {
 										HStack {
 											AnimeCoverView(anime: anime, preloadImage: true)
 												.matchedGeometryEffect(id: anime.id, in: searchViewNamespace, isSource: false)
-												
-											Text(anime.title)
+											
+											VStack(alignment: .leading) {
+												Text(anime.title)
+													.font(.title2)
+												HStack {
+													if let airDate = anime.airDate?.toDateISO() {
+														Text(airDate.year)
+													}
+													
+													Text(anime.rating ?? "Unrated")
+													
+													Text("\(anime.episodeCount ?? 1)ep")
+													
+													if let score = anime.score {
+														HStack(alignment: .bottom, spacing: 0) {
+															Text("\(String(format: "%.1f", score))")
+																.bold()
+															Text("/10")
+														}.foregroundColor(Color(.systemYellow))
+													}
+												}.font(.body)
+											}
 											Spacer()
 										}.padding(.horizontal)
+										.background(Color(.systemBackground))
 									}.buttonStyle(PlainButtonStyle())
 									.frame(idealHeight: 80)
 									
@@ -68,7 +89,7 @@ struct SearchView: View {
 											AnimeCoverView(anime: anime, preloadImage: true)
 												.matchedGeometryEffect(id: anime.id, in: searchViewNamespace)
 												.shadow(radius: 5)
-												
+											
 											Text(anime.title)
 												.lineLimit(1)
 										}
@@ -83,10 +104,6 @@ struct SearchView: View {
 		.navigationBarHidden(true)
 		
 	}
-	
-	
-	
-	
 	
 	enum DisplayMode {
 		case Grid

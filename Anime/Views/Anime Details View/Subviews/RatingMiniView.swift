@@ -28,7 +28,7 @@ struct RatingMiniView: View {
 				Text("\(anime.members)")
 					.font(.caption)
 			}.padding()
-		}.frame(minWidth: 110, minHeight: 110)
+		}.frame(width: 115, height: 115)
 		.background(Color(.secondarySystemFill))
 		.clipShape(RoundedRectangle(cornerRadius: 10))
 	}

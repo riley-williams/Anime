@@ -129,6 +129,14 @@
 			path = Networking;
 			sourceTree = "<group>";
 		};
+		E4191D4325B03C9800F43158 /* Subviews */ = {
+			isa = PBXGroup;
+			children = (
+				E4191D3E25B0327C00F43158 /* RatingMiniView.swift */,
+			);
+			path = Subviews;
+			sourceTree = "<group>";
+		};
 		E4455A4625AF9BA700166515 = {
 			isa = PBXGroup;
 			children = (
@@ -214,8 +222,8 @@
 			isa = PBXGroup;
 			children = (
 				E4A3BB3D25AFEC680058C5D3 /* AnimeDetailsView.swift */,
-				E4191D3E25B0327C00F43158 /* RatingMiniView.swift */,
 				E4A3BB4225AFEC780058C5D3 /* AnimeDetailsViewModel.swift */,
+				E4191D4325B03C9800F43158 /* Subviews */,
 			);
 			path = "Anime Details View";
 			sourceTree = "<group>";
