@@ -59,7 +59,7 @@ struct AnimeDetailsView: View {
 					}
 				}
 				
-			}
+			}.padding(.horizontal)
 		}.navigationBarTitle(viewModel.anime.title, displayMode: .inline)
 	}
 	

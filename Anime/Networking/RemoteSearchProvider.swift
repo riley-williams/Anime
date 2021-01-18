@@ -9,16 +9,15 @@ import Combine
 import Foundation
 
 class RemoteSearchProvider: AnimeSearchProvider {
+
 	/// The remote API host
-	//var host: String = "https://anime.rileyw.dev"
-	// NOTE: The above URL points to my personal server
-	// While working on this, I was sometimes unable to reach the provided API (no response / timeout)
-	//   so I used Docker to self-host a copy of the API on my personal home server. It should
-	//   behave identically to the official API.
-	// If the official API is working and/or for some reason my server is down, the below line
-	//   of code uses the official API.
-	/// The remote API host
-	 var host: String = "https://api.jikan.moe"
+	private var host: String = "https://api.jikan.moe"
+	
+	/// An alternate remote API host
+	private var alternateHost: String = "https://anime.rileyw.dev"
+	
+	/// Path relative to host for searching
+	private var searchPath: String { "/v3/search/anime" }
 	
 	/// Obtains a list of animes
 	/// - Parameter keyword: keyword to search for
@@ -27,14 +26,26 @@ class RemoteSearchProvider: AnimeSearchProvider {
 		
 		guard keyword.count >= 3,
 			  let encodedKeywords = keyword.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
-			  let url = URL(string: host + "/v3/search/anime?q=\(encodedKeywords)")
+			  let url = URL(string: host + searchPath + "?q=\(encodedKeywords)")
 		else {
 			return Just([])
 				.setFailureType(to: SearchError.self)
 				.eraseToAnyPublisher()
 		}
 		
+		let backgroundQueue = DispatchQueue.global()
+		
 		return URLSession.shared.dataTaskPublisher(for: url)
+			.timeout(.seconds(3), scheduler: backgroundQueue, customError: { URLError(.timedOut) })
+			.tryCatch { [weak self] _ -> URLSession.DataTaskPublisher in
+				guard let self = self,
+					  let alternateURL = URL(string: self.alternateHost + self.searchPath + "?q=\(encodedKeywords)") else { throw URLError(.cannotConnectToHost) }
+				//Switch hosts because the issue is likely to persist
+				let tmp = self.host
+				self.host = self.alternateHost
+				self.alternateHost = tmp
+				return URLSession.shared.dataTaskPublisher(for: alternateURL)
+			}
 			// Apparently the official API only permits 1 request every 4s
 			//.throttle(for: .seconds(4.5), scheduler: RunLoop.current, latest: true)
 			.map(\.data)
@@ -51,7 +62,8 @@ class RemoteSearchProvider: AnimeSearchProvider {
 					return .Other(error)
 				}
 				
-			}.eraseToAnyPublisher()
+			}.subscribe(on: backgroundQueue)
+			.eraseToAnyPublisher()
 	}
 	
 }

@@ -18,6 +18,10 @@ class AnimeCoverViewModel: ObservableObject {
 	
 	init(_ anime: Anime) {
 		self.anime = anime
+		if let imageURLString = anime.imageURL,
+		   let imageURL = URL(string: imageURLString) {
+			image = ImageProvider.shared.cachedImage(for: imageURL)
+		}
 	}
 	
 	/// Attempts to retrieve the cover art
